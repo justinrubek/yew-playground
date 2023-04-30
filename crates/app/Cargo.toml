@@ -1,0 +1,20 @@
+[package]
+name = "app"
+version = { workspace = true }
+edition = { workspace = true }
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+anyhow = { workspace = true }
+clap = { version = "4.0.19", features = ["derive"] }
+# serds = { workspace = true }
+# serde_json = { workspace = true }
+thiserror = { workspace = true }
+time = { version = "*", features = ["wasm-bindgen"] }
+tracing = { workspace = true, default-features = false }
+tracing-subscriber = { version = "0.3.16", features = ["time"] }
+tracing-web = "0.1.2"
+wasm-bindgen = { workspace = true }
+yew = { version = "0.20.0", features = ["csr"] }
