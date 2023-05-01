@@ -56,20 +56,11 @@
       }: let
         underscore_name = pkgs.lib.strings.replaceStrings ["-"] ["_"] name;
 
-        cargo-derivation = craneLib.mkCargoDerivation ({
+        cargo-derivation = craneLib.buildPackage ({
             pname = name;
             cargoArtifacts = deps-only;
             cargoExtraArgs = "-p ${name} --target wasm32-unknown-unknown";
             doCheck = false;
-            doInstallCargoArtifacts = false;
-
-            buildPhaseCargoCommand = ''
-              cargoBuildLog=$(mktemp cargoBuildLogXXXX.json)
-              cargoWithProfile build -p ${name} --target wasm32-unknown-unknown --message-format json-render-diagnostics > $cargoBuildLog
-
-              mkdir -p $out
-              cp -r target $out
-            '';
           }
           // common-build-args);
 
@@ -80,7 +71,7 @@
           src = "";
           buildCommand = ''
             ${pkgs.wasm-bindgen-cli}/bin/wasm-bindgen \
-              ${cargo-derivation}/target/wasm32-unknown-unknown/release/${underscore_name}.wasm \
+              ${cargo-derivation}/lib/${underscore_name}.wasm \
               --out-dir $out \
               --target ${wasm-bindgen-target} \
 
